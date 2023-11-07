@@ -2,15 +2,35 @@ import Wrapper from "../assets/wrappers/RegisterPage";
 import { FormRow, Logo } from "../components";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import {
+  registerUser,
+  loginUser,
+  selectLoading,
+  selectUser,
+} from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   name: "",
   email: "",
   password: "",
-  isMember: true,
+  isMember: false,
 };
+
 const Register = () => {
   const [values, setValues] = useState(initialState);
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => selectLoading(state));
+  const user = useSelector((state) => selectUser(state));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (user) navigate("/");
+    }, 2000);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +46,13 @@ const Register = () => {
     const { name, email, isMember, password } = values;
     if (!email || !password || (!isMember && !name)) {
       toast.error("Please provide all the values");
+      return;
+    }
+    if (values.isMember) {
+      dispatch(loginUser({ email, password }));
+      return;
+    } else {
+      dispatch(registerUser({ email, name, password }));
       return;
     }
   };
@@ -61,7 +88,7 @@ const Register = () => {
           handleChange={handleChange}
         />
         <div className="form-row">
-          <button className="btn btn-block">
+          <button className="btn btn-block" type="submit" disabled={loading}>
             {values.isMember ? "Login" : "Register"}
           </button>
         </div>

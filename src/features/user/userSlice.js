@@ -83,5 +83,6 @@ const userSlice = createSlice({
 
 export const selectLoading = (state) => state.user.loading;
 export const selectUser = (state) => state.user.user;
+export const selectIsSidebarOpen = (state) => state.user.isSidebarOpen;
 export const { toggleSidebar, logout } = userSlice.actions;
 export default userSlice.reducer;

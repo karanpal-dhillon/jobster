@@ -3,19 +3,21 @@ import {
   addUserToLocalStorage,
   customAxios,
   getUserFromLocalStorage,
+  removeUserFromLocalStorage,
 } from "../../utils";
 import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
   user: getUserFromLocalStorage(),
+  isSidebarOpen: false,
 };
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
     try {
-      const response = await customAxios.post("/auth/testingRegister", user);
+      const response = await customAxios.post("/auth/register", user);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -38,7 +40,16 @@ export const loginUser = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    toggleSidebar: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen;
+    },
+    logout: (state) => {
+      removeUserFromLocalStorage();
+      state.isSidebarOpen = false;
+      state.user = null;
+    },
+  },
 
   extraReducers(builder) {
     builder
@@ -72,4 +83,5 @@ const userSlice = createSlice({
 
 export const selectLoading = (state) => state.user.loading;
 export const selectUser = (state) => state.user.user;
+export const { toggleSidebar, logout } = userSlice.actions;
 export default userSlice.reducer;

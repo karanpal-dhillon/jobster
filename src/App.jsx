@@ -1,25 +1,35 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Dashboard, Landing, Error, Register } from "./pages";
+import { Landing, Error, Register, ProtectedRoute } from "./pages";
+import { AllJobs, SharedLayout, Stats } from "./pages/dashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
     errorElement: <Error />,
+    element: (
+      <ProtectedRoute>
+        <SharedLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <Stats />,
       },
       {
-        path: "landing",
-        element: <Landing />,
-      },
-      {
-        path: "register",
-        element: <Register />,
+        path: "all-jobs",
+        element: <AllJobs />,
       },
     ],
+  },
+  {
+    path: "landing",
+    element: <Landing />,
+  },
+  {
+    path: "register",
+    element: <Register />,
   },
 ]);
 function App() {

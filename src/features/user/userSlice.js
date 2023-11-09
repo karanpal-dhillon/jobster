@@ -37,6 +37,22 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (user, thunkAPI) => {
+    try {
+      const response = await customAxios.patch(`/auth/updateUser`, user, {
+        headers: {
+          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -77,6 +93,20 @@ const userSlice = createSlice({
         state.user = user;
         addUserToLocalStorage(user);
         toast.success("Logged in successfully");
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.loading = false;
+        state.user = user;
+        addUserToLocalStorage(user);
+        toast.success("user updated successfully");
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        toast.error(payload);
       });
   },
 });

@@ -1,7 +1,7 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Landing, Error, Register, ProtectedRoute } from "./pages";
-import { AllJobs, SharedLayout, Stats } from "./pages/dashboard";
+import { AllJobs, SharedLayout, Stats, Profile } from "./pages/dashboard";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "all-jobs",
         element: <AllJobs />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

@@ -2,12 +2,8 @@ import Wrapper from "../assets/wrappers/RegisterPage";
 import { FormRow, Logo } from "../components";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import {
-  registerUser,
-  loginUser,
-  selectLoading,
-  selectUser,
-} from "../features/user/userSlice";
+import { selectLoading, selectUser } from "../features/user/userSlice";
+import { loginUser, registerUser } from "../features/user/userThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";

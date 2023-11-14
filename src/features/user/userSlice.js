@@ -1,57 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   addUserToLocalStorage,
-  customAxios,
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
 } from "../../utils";
 import { toast } from "react-toastify";
+import { loginUser, registerUser, updateUser } from "./userThunk";
 
 const initialState = {
   loading: false,
   user: getUserFromLocalStorage(),
   isSidebarOpen: false,
 };
-
-export const registerUser = createAsyncThunk(
-  "user/registerUser",
-  async (user, thunkAPI) => {
-    try {
-      const response = await customAxios.post("/auth/register", user);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
-  },
-);
-
-export const loginUser = createAsyncThunk(
-  "user/loginUser",
-  async (user, thunkAPI) => {
-    try {
-      const response = await customAxios.post("/auth/login", user);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
-  },
-);
-
-export const updateUser = createAsyncThunk(
-  "user/updateUser",
-  async (user, thunkAPI) => {
-    try {
-      const response = await customAxios.patch(`/auth/updateUser`, user, {
-        headers: {
-          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
-  },
-);
 
 const userSlice = createSlice({
   name: "user",
@@ -77,7 +37,6 @@ const userSlice = createSlice({
         toast.error(payload);
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
-        console.log("insider fulfilled state");
         const { user } = payload;
         state.user = user;
         state.loading = false;

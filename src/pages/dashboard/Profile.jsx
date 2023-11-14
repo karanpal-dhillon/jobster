@@ -3,7 +3,7 @@ import { selectLoading, selectUser } from "../../features/user/userSlice";
 import { FormRow } from "../../components";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import { useState } from "react";
-import { updateUser } from "../../features/user/userSlice";
+import { updateUser } from "../../features/user/userThunk";
 import { toast } from "react-toastify";
 
 const Profile = () => {
